@@ -9,6 +9,12 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    var isRecording = RecordingState.NotRecording {
+        didSet {
+            updateUIForRecordingState(isRecording)
+        }
+    }
 
     @IBOutlet weak var recordingLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
@@ -17,7 +23,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidAppear")
+        print("viewDidLoad")
     }
 
     override func didReceiveMemoryWarning() {
@@ -26,23 +32,26 @@ class ViewController: UIViewController {
     }
 
     @IBAction func recordAudio(sender: AnyObject) {
-        
         print("Record Button Was Pressed")
-        recordingLabel.text = "Recording in Progress"
+        isRecording = RecordingState.Recording // Update UI State
         
     }
 
     @IBAction func stopRecording(sender: AnyObject) {
         print("stop recording button pressed")
+        isRecording = RecordingState.NotRecording // Update UI State
     }
     
     override func viewWillAppear(animated: Bool) {
         print("viewWillAppear")
-        stopRecordingButton.enabled = false
+        isRecording = RecordingState.NotRecording // Update UI State
     }
     
-    // View Methods
+    // MARK: - View Methods
     
+    /**
+     Description
+     */
     enum RecordingState {
         case Recording
         case NotRecording
@@ -64,20 +73,24 @@ class ViewController: UIViewController {
                 return .Recording
             }
         }
+        
+        var value: Bool {
+            get {
+                return (self == .Recording)
+            }
+        }
     }
     
     func updateUIForRecordingState(state: RecordingState) { //-> RecordingState {
         recordingLabel.text = state.toString()
-        let isRecording = (state == .Recording)
-        recordButton.enabled = isRecording
-        stopRecordingButton.enabled = !isRecording
-        //return state.toggle()
+        recordButton.enabled = !state.value
+        stopRecordingButton.enabled = state.value
     }
     
     struct Label {
-        static let RecordingLabelString = ""
+        static let RecordingLabelString = "Recording in Progress"
         
-        static let NotRecordingLabelString = ""
+        static let NotRecordingLabelString = "Tap to Record"
     }
     
 }
