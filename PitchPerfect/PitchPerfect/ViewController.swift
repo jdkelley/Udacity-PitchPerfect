@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    /// The UI state of this view controller. Note: Setting this value will 
+    /// update the UI to reflect the state.
     var isRecording = RecordingState.NotRecording {
         didSet {
             updateUIForRecordingState(isRecording)
@@ -50,12 +52,23 @@ class ViewController: UIViewController {
     // MARK: - View Methods
     
     /**
-     Description
+     UI State for the initial view of Pitch Perfect.
+     
+     Possible States:
+      - `Recording`
+      - `NotRecording` 
+     
+     Available Methods:
+     
+      - `toString` : This method returns the text for the recording label.
+      - `toggle` : This method returns a RecordingState instance that is opposite of `self`.
+      - `value` : This is a computed property that returns if `self` is .Recording.
      */
     enum RecordingState {
         case Recording
         case NotRecording
         
+        /// This method returns the text for the recording label.
         func toString() -> String {
             switch self {
             case .Recording:
@@ -65,6 +78,7 @@ class ViewController: UIViewController {
             }
         }
         
+        /// This method returns a RecordingState instance that is opposite of `self`.
         func toggle() -> RecordingState {
             switch self {
             case .Recording:
@@ -74,6 +88,7 @@ class ViewController: UIViewController {
             }
         }
         
+        /// Returns if `self` is .Recording.
         var value: Bool {
             get {
                 return (self == .Recording)
@@ -81,15 +96,23 @@ class ViewController: UIViewController {
         }
     }
     
-    func updateUIForRecordingState(state: RecordingState) { //-> RecordingState {
+    /**
+     Based on the `RecordingState` passed to this function, this function updates 
+     the UI to match the current recording state.
+     - parameter state: A `RecordingState` instance off of which to set the view.
+     */
+    func updateUIForRecordingState(state: RecordingState) {
         recordingLabel.text = state.toString()
         recordButton.enabled = !state.value
         stopRecordingButton.enabled = state.value
     }
     
+    /// A struct (value type) to hold the "magic strings" in PitchPerfect. So I 
+    /// only have to update them in one place and I get autocomplete.
     struct Label {
+        /// Holds Value: `"Recording in Progress"`
         static let RecordingLabelString = "Recording in Progress"
-        
+        /// Holds Value: `"Tap to Record"`
         static let NotRecordingLabelString = "Tap to Record"
     }
     
