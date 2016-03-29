@@ -31,12 +31,6 @@ class RecordSoundsViewController : UIViewController {
     
     // MARK: - View Controller Life Cycle Methods
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        audioRecorder.delegate = self
-    }
-    
     override func viewWillAppear(animated: Bool) {
         isRecording = RecordingState.NotRecording // Update UI State
     }
@@ -67,6 +61,7 @@ class RecordSoundsViewController : UIViewController {
             try audioRecorder = AVAudioRecorder(URL: filePath!, settings: [:])
             
             audioRecorder.meteringEnabled = true
+            audioRecorder.delegate = self
             audioRecorder.prepareToRecord()
             audioRecorder.record()
         } catch {
