@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
+class RecordSoundsViewController : UIViewController {
     
     /// The UI state of this view controller. Note: Setting this value will 
     /// update the UI to reflect the state.
@@ -135,6 +135,20 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         static let RecordingLabelString = "Recording in Progress"
         /// Holds Value: `"Tap to Record"`
         static let NotRecordingLabelString = "Tap to Record"
+    }
+    
+}
+
+extension RecordSoundsViewController : AVAudioRecorderDelegate {
+    
+    func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
+        print("Recorder did finish")
+        if flag {
+            self.performSegueWithIdentifier("stopRecording", sender: audioRecorder.url)
+        } else {
+            print("Saving of recording failed - method: \(#function)")
+        }
+        
     }
     
 }
