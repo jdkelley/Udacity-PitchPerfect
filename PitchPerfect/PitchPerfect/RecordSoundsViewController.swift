@@ -19,55 +19,70 @@ class RecordSoundsViewController : UIViewController {
         }
     }
     
+    // Our recorder
     var audioRecorder: AVAudioRecorder!
+    
+    // reference to shared instance
+    let audioSessionSingleton = AVAudioSession.sharedInstance()
 
     @IBOutlet weak var recordingLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var stopRecordingButton: UIButton!
     
+    // MARK: - View Controller Life Cycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("viewDidLoad")
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    @IBAction func recordAudio(sender: AnyObject) {
-        print("Record Button Was Pressed")
-        isRecording = RecordingState.Recording // Update UI State
         
+        audioRecorder.delegate = self
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        isRecording = RecordingState.NotRecording // Update UI State
+    }
+
+    // MARK: - Recording
+    
+    @IBAction func recordAudio(sender: AnyObject) {
+        isRecording = RecordingState.Recording // Update UI State
+        startRecording()
+    }
+
+    @IBAction func stopRecording(sender: AnyObject) {
+        isRecording = RecordingState.NotRecording // Update UI State
+        
+        stopAudioSession()
+    }
+    
+    /// A convenience method to improve readability of the Actions
+    func startRecording() {
         let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) [0] as String
         let recordingName = "recordedVoice.wav"
         let pathArray = [dirPath,recordingName]
         let filePath = NSURL.fileURLWithPathComponents(pathArray)
-        print(filePath)
+        
+        do {
+            try audioSessionSingleton.setCategory(AVAudioSessionCategoryPlayAndRecord)
             
-        let session = AVAudioSession.sharedInstance()
-        try! session.setCategory(AVAudioSessionCategoryPlayAndRecord)
-        
-        try! audioRecorder = AVAudioRecorder(URL: filePath!, settings: [:])
-        audioRecorder.delegate = self
-        audioRecorder.meteringEnabled = true
-        audioRecorder.prepareToRecord()
-        audioRecorder.record()
-        
-    }
-
-    @IBAction func stopRecording(sender: AnyObject) {
-        print("stop recording button pressed")
-        isRecording = RecordingState.NotRecording // Update UI State
-        audioRecorder.stop()
-        let audioSession = AVAudioSession.sharedInstance()
-        try! audioSession.setActive(false)
+            try audioRecorder = AVAudioRecorder(URL: filePath!, settings: [:])
+            
+            audioRecorder.meteringEnabled = true
+            audioRecorder.prepareToRecord()
+            audioRecorder.record()
+        } catch {
+            print("Something went wrong! in method: \(#function)")
+        }
     }
     
-    override func viewWillAppear(animated: Bool) {
-        print("viewWillAppear")
-        isRecording = RecordingState.NotRecording // Update UI State
+    /// A convenience method to improve readability of the Actions
+    func stopAudioSession() {
+        audioRecorder.stop()
+        
+        do {
+            try audioSessionSingleton.setActive(false)
+        } catch {
+            print("Something went wrong! Could not turn off audio session in method: \(#function)")
+        }
     }
     
     // MARK: - View Methods
@@ -135,25 +150,17 @@ class RecordSoundsViewController : UIViewController {
             playSoundsVC.recordedAudioURL = recordedAudioURL
         }
     }
-    var recordedAudio : RecordedAudio!
 }
+
+// MARK: - AVAudioRecorderDelegate
 
 extension RecordSoundsViewController : AVAudioRecorderDelegate {
     
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
-        print("Recorder did finish")
         if flag {
-            //----------------------------------
-            let recordedAudio = RecordedAudio()
-            recordedAudio.filePathURL = recorder.url
-            recordedAudio.title = recorder.url.lastPathComponent
-            //----------------------------------
             self.performSegueWithIdentifier(SegueIdentifier.StopRecording, sender: audioRecorder.url)
         } else {
             print("Saving of recording failed - method: \(#function)")
         }
-        
     }
-    
 }
-

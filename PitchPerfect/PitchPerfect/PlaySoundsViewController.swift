@@ -51,6 +51,8 @@ class PlaySoundsViewController: UIViewController {
         stopAudio()
     }
 
+    // MARK: - View Controller Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAudio()
