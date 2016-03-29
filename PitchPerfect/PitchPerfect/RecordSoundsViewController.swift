@@ -132,10 +132,10 @@ class RecordSoundsViewController : UIViewController {
         if segue.identifier == SegueIdentifier.StopRecording {
             let playSoundsVC = segue.destinationViewController as! PlaySoundsViewController
             let recordedAudioURL = sender as! NSURL
-            playSoundsVC.recordedAudio = recordedAudioURL
+            playSoundsVC.recordedAudioURL = recordedAudioURL
         }
     }
-    
+    var recordedAudio : RecordedAudio!
 }
 
 extension RecordSoundsViewController : AVAudioRecorderDelegate {
@@ -143,6 +143,11 @@ extension RecordSoundsViewController : AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
         print("Recorder did finish")
         if flag {
+            //----------------------------------
+            let recordedAudio = RecordedAudio()
+            recordedAudio.filePathURL = recorder.url
+            recordedAudio.title = recorder.url.lastPathComponent
+            //----------------------------------
             self.performSegueWithIdentifier(SegueIdentifier.StopRecording, sender: audioRecorder.url)
         } else {
             print("Saving of recording failed - method: \(#function)")

@@ -8,21 +8,14 @@
 
 import Foundation
 
-struct ViewControllerIdentifiers {
-    
-    static let PlaySoundsViewController: String = "PlaySoundsViewController"
-    static let RecordSoundsViewController: String = "RecordSoundsViewController"
-    
-}
+// All the magic strings
 
 struct SegueIdentifier {
     static let StopRecording = "stopRecording"
 }
 
 struct Storyboard {
-    
     static let Main: String = "Main"
-    
 }
 
 /// A struct (value type) to hold the UI "magic strings" in PitchPerfect. So I
