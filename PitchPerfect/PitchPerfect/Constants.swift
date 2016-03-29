@@ -15,7 +15,7 @@ struct ViewControllerIdentifiers {
     
 }
 
-struct Segue {
+struct SegueIdentifier {
     static let StopRecording = "stopRecording"
 }
 

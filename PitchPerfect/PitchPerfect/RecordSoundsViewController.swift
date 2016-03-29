@@ -128,6 +128,14 @@ class RecordSoundsViewController : UIViewController {
         stopRecordingButton.enabled = state.value
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == SegueIdentifier.StopRecording {
+            let playSoundsVC = segue.destinationViewController as! PlaySoundsViewController
+            let recordedAudioURL = sender as! NSURL
+            playSoundsVC.recordedAudio = recordedAudioURL
+        }
+    }
+    
 }
 
 extension RecordSoundsViewController : AVAudioRecorderDelegate {
@@ -135,7 +143,7 @@ extension RecordSoundsViewController : AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
         print("Recorder did finish")
         if flag {
-            self.performSegueWithIdentifier(Segue.StopRecording, sender: audioRecorder.url)
+            self.performSegueWithIdentifier(SegueIdentifier.StopRecording, sender: audioRecorder.url)
         } else {
             print("Saving of recording failed - method: \(#function)")
         }
