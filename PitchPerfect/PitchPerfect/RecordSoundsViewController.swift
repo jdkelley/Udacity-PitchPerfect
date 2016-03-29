@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  RecordSoundsViewController.swift
 //  PitchPerfect
 //
 //  Created by Joshua Kelley on 3/22/16.
@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import AVFoundation
 
-class ViewController: UIViewController {
+class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     
     /// The UI state of this view controller. Note: Setting this value will 
     /// update the UI to reflect the state.
@@ -17,6 +18,8 @@ class ViewController: UIViewController {
             updateUIForRecordingState(isRecording)
         }
     }
+    
+    var audioRecorder: AVAudioRecorder!
 
     @IBOutlet weak var recordingLabel: UILabel!
     @IBOutlet weak var recordButton: UIButton!
@@ -36,6 +39,21 @@ class ViewController: UIViewController {
     @IBAction func recordAudio(sender: AnyObject) {
         print("Record Button Was Pressed")
         isRecording = RecordingState.Recording // Update UI State
+        
+        let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) [0] as String
+        let recordingName = "recordedVoice.wav"
+        let pathArray = [dirPath,recordingName]
+        let filePath = NSURL.fileURLWithPathComponents(pathArray)
+        print(filePath)
+            
+        let session = AVAudioSession.sharedInstance()
+        try! session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        
+        try! audioRecorder = AVAudioRecorder(URL: filePath!, settings: [:])
+        audioRecorder.delegate = self
+        audioRecorder.meteringEnabled = true
+        audioRecorder.prepareToRecord()
+        audioRecorder.record()
         
     }
 
