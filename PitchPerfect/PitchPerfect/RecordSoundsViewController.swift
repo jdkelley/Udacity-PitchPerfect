@@ -60,6 +60,9 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     @IBAction func stopRecording(sender: AnyObject) {
         print("stop recording button pressed")
         isRecording = RecordingState.NotRecording // Update UI State
+        audioRecorder.stop()
+        let audioSession = AVAudioSession.sharedInstance()
+        try! audioSession.setActive(false)
     }
     
     override func viewWillAppear(animated: Bool) {
