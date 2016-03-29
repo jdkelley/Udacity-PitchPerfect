@@ -15,6 +15,7 @@
 		962B34181CA2237800D3DA10 /* PitchPerfectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962B34171CA2237800D3DA10 /* PitchPerfectTests.swift */; };
 		962B34231CA2237800D3DA10 /* PitchPerfectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 962B34221CA2237800D3DA10 /* PitchPerfectUITests.swift */; };
 		963ACA871CAACFEB00FCD0EF /* PlaySoundsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963ACA861CAACFEB00FCD0EF /* PlaySoundsViewController.swift */; };
+		963ACA891CAAD09B00FCD0EF /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 963ACA881CAAD09B00FCD0EF /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		962B34221CA2237800D3DA10 /* PitchPerfectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitchPerfectUITests.swift; sourceTree = "<group>"; };
 		962B34241CA2237800D3DA10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		963ACA861CAACFEB00FCD0EF /* PlaySoundsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaySoundsViewController.swift; sourceTree = "<group>"; };
+		963ACA881CAAD09B00FCD0EF /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				962B34021CA2237800D3DA10 /* AppDelegate.swift */,
 				962B34041CA2237800D3DA10 /* RecordSoundsViewController.swift */,
 				963ACA861CAACFEB00FCD0EF /* PlaySoundsViewController.swift */,
+				963ACA881CAAD09B00FCD0EF /* Constants.swift */,
 				962B34061CA2237800D3DA10 /* Main.storyboard */,
 				962B34091CA2237800D3DA10 /* Assets.xcassets */,
 				962B340B1CA2237800D3DA10 /* LaunchScreen.storyboard */,
@@ -263,6 +266,7 @@
 				962B34051CA2237800D3DA10 /* RecordSoundsViewController.swift in Sources */,
 				963ACA871CAACFEB00FCD0EF /* PlaySoundsViewController.swift in Sources */,
 				962B34031CA2237800D3DA10 /* AppDelegate.swift in Sources */,
+				963ACA891CAAD09B00FCD0EF /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

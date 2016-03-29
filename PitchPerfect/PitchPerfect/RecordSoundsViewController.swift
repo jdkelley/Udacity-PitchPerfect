@@ -128,15 +128,6 @@ class RecordSoundsViewController : UIViewController {
         stopRecordingButton.enabled = state.value
     }
     
-    /// A struct (value type) to hold the "magic strings" in PitchPerfect. So I 
-    /// only have to update them in one place and I get autocomplete.
-    struct Label {
-        /// Holds Value: `"Recording in Progress"`
-        static let RecordingLabelString = "Recording in Progress"
-        /// Holds Value: `"Tap to Record"`
-        static let NotRecordingLabelString = "Tap to Record"
-    }
-    
 }
 
 extension RecordSoundsViewController : AVAudioRecorderDelegate {
@@ -144,7 +135,7 @@ extension RecordSoundsViewController : AVAudioRecorderDelegate {
     func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
         print("Recorder did finish")
         if flag {
-            self.performSegueWithIdentifier("stopRecording", sender: audioRecorder.url)
+            self.performSegueWithIdentifier(Segue.StopRecording, sender: audioRecorder.url)
         } else {
             print("Saving of recording failed - method: \(#function)")
         }
