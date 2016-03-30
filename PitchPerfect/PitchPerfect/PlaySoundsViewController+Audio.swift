@@ -32,8 +32,8 @@ extension PlaySoundsViewController: AVAudioPlayerDelegate {
         // initialize (recording) audio file
         do {
             audioFile = try AVAudioFile(forReading: recordedAudioURL)
-        } catch {
-            showAlert(Alerts.AudioFileError, message: String(error))
+        } catch let error as NSError {
+            showAlert(Alerts.AudioFileError, message: String(error.localizedDescription))
         }
         print("Audio has been setup")
     }
