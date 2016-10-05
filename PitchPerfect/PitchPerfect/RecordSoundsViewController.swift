@@ -13,7 +13,7 @@ class RecordSoundsViewController : UIViewController {
     
     /// The UI state of this view controller. Note: Setting this value will 
     /// update the UI to reflect the state.
-    var isRecording = RecordingState.NotRecording {
+    var isRecording = RecordingState.notRecording {
         didSet {
             updateUIForRecordingState(isRecording)
         }
@@ -31,36 +31,35 @@ class RecordSoundsViewController : UIViewController {
     
     // MARK: - View Controller Life Cycle Methods
     
-    override func viewWillAppear(animated: Bool) {
-        isRecording = RecordingState.NotRecording // Update UI State
+    override func viewWillAppear(_ animated: Bool) {
+        isRecording = RecordingState.notRecording // Update UI State
     }
 
     // MARK: - Recording
     
-    @IBAction func recordAudio(sender: AnyObject) {
-        isRecording = RecordingState.Recording // Update UI State
+    @IBAction func recordAudio(_ sender: AnyObject) {
+        isRecording = RecordingState.recording // Update UI State
         startRecording()
     }
 
-    @IBAction func stopRecording(sender: AnyObject) {
-        isRecording = RecordingState.NotRecording // Update UI State
+    @IBAction func stopRecording(_ sender: AnyObject) {
+        isRecording = RecordingState.notRecording // Update UI State
         
         stopAudioSession()
     }
     
     /// A convenience method to improve readability of the Actions
     func startRecording() {
-        let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true) [0] as String
+        let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) [0] as String
         let recordingName = "recordedVoice.wav"
-        let pathArray = [dirPath,recordingName]
-        let filePath = NSURL.fileURLWithPathComponents(pathArray)
+        let filePath = URL(fileURLWithPath: dirPath, isDirectory: true).appendingPathComponent(recordingName)
         
         do {
             try audioSessionSingleton.setCategory(AVAudioSessionCategoryPlayAndRecord)
             
-            try audioRecorder = AVAudioRecorder(URL: filePath!, settings: [:])
+            try audioRecorder = AVAudioRecorder(url: filePath, settings: [:])
             
-            audioRecorder.meteringEnabled = true
+            audioRecorder.isMeteringEnabled = true
             audioRecorder.delegate = self
             audioRecorder.prepareToRecord()
             audioRecorder.record()
@@ -96,15 +95,15 @@ class RecordSoundsViewController : UIViewController {
       - `value` : This is a computed property that returns if `self` is .Recording.
      */
     enum RecordingState {
-        case Recording
-        case NotRecording
+        case recording
+        case notRecording
         
         /// This method returns the text for the recording label.
         func toString() -> String {
             switch self {
-            case .Recording:
+            case .recording:
                 return Label.RecordingLabelString
-            case .NotRecording:
+            case .notRecording:
                 return Label.NotRecordingLabelString
             }
         }
@@ -112,17 +111,17 @@ class RecordSoundsViewController : UIViewController {
         /// This method returns a RecordingState instance that is opposite of `self`.
         func toggle() -> RecordingState {
             switch self {
-            case .Recording:
-                return .NotRecording
-            case .NotRecording:
-                return .Recording
+            case .recording:
+                return .notRecording
+            case .notRecording:
+                return .recording
             }
         }
         
         /// Returns if `self` is .Recording.
         var value: Bool {
             get {
-                return (self == .Recording)
+                return (self == .recording)
             }
         }
     }
@@ -132,16 +131,16 @@ class RecordSoundsViewController : UIViewController {
      the UI to match the current recording state.
      - parameter state: A `RecordingState` instance off of which to set the view.
      */
-    func updateUIForRecordingState(state: RecordingState) {
+    func updateUIForRecordingState(_ state: RecordingState) {
         recordingLabel.text = state.toString()
-        recordButton.enabled = !state.value
-        stopRecordingButton.enabled = state.value
+        recordButton.isEnabled = !state.value
+        stopRecordingButton.isEnabled = state.value
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SegueIdentifier.StopRecording {
-            let playSoundsVC = segue.destinationViewController as! PlaySoundsViewController
-            let recordedAudioURL = sender as! NSURL
+            let playSoundsVC = segue.destination as! PlaySoundsViewController
+            let recordedAudioURL = sender as! URL
             playSoundsVC.recordedAudioURL = recordedAudioURL
         }
     }
@@ -151,9 +150,9 @@ class RecordSoundsViewController : UIViewController {
 
 extension RecordSoundsViewController : AVAudioRecorderDelegate {
     
-    func audioRecorderDidFinishRecording(recorder: AVAudioRecorder, successfully flag: Bool) {
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         if flag {
-            performSegueWithIdentifier(SegueIdentifier.StopRecording, sender: audioRecorder.url)
+            performSegue(withIdentifier: SegueIdentifier.StopRecording, sender: audioRecorder.url)
         } else {
             print("Saving of recording failed - method: \(#function)")
         }
